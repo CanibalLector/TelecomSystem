@@ -13,6 +13,9 @@ namespace Telecom::Network {
         // Отправка JSON в сокет
         static qint64 sendPacket(QTcpSocket* socket, const QJsonObject& jsonObject);
 
+        // Чтение JSON из сокета
+        static QJsonObject readPacket(QTcpSocket* socket);
+
     };
 
 } // namespace Telecom::Network

@@ -4,6 +4,9 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include "NetworkProtocol.hpp"
+#include "QtCore/qjsonobject.h"
 
 int main(int argc, char* argv[]) {
     // Init Qt Graphics
@@ -54,19 +57,22 @@ int main(int argc, char* argv[]) {
             if (clientSocket->waitForReadyRead(30000)) {
 
 
-                //Cчитываем 4 байта длины
-                QByteArray sizeBuffer = clientSocket->read(sizeof(quint32));
-                QDataStream stream(sizeBuffer);
+//                //Cчитываем 4 байта длины
+//                QByteArray sizeBuffer = clientSocket->read(sizeof(quint32));
+//                QDataStream stream(sizeBuffer);
 
-                quint32 val;
-                stream >> val;
-                qDebug() << val << "Packet length";
+//                quint32 val;
+//                stream >> val;
+//                qDebug() << val << "Packet length";
 
-                QByteArray jsonData = clientSocket->read(val);
+//                QByteArray jsonData = clientSocket->read(val);
 
-                QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+//                QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
-                qDebug().noquote() << doc.toJson(QJsonDocument::Indented);
+
+                QJsonObject obj = Telecom::Network::NetworkProtocol::readPacket(clientSocket);
+
+                qDebug().noquote() << QJsonDocument(obj).toJson(QJsonDocument::Indented);
 
 
             } else

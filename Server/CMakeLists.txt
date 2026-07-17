@@ -22,4 +22,5 @@ target_link_libraries(TelecomServer PRIVATE
     Qt6::Gui
     Qt6::Qml
     Qt6::Quick
+    SharedNetwork # Добавляем общую статическую библиотеку для записи/чтения JSON в сокет
 )
