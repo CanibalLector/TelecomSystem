@@ -12,5 +12,6 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.5.2 REQUIRED COMPONENTS Core Network)
 
+add_subdirectory(Shared)
 add_subdirectory(Server)
 add_subdirectory(Client)
