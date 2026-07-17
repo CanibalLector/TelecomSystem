@@ -1,0 +1,32 @@
+# system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# build results
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# qt creator products
+build-*/
+*.user
+*.user.*
+CMakeLists.txt.user
+.cmake/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+*.pro.user
+.qmlclient/
+*.qmlc
+*.jsc
+
+# others
+*.log
+*.tmp
