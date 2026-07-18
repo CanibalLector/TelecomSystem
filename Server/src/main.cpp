@@ -5,8 +5,10 @@
 #include <QTcpSocket>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QThread>
 #include "NetworkProtocol.hpp"
 #include "QtCore/qjsonobject.h"
+#include "NetworkWorker.hpp"
 
 int main(int argc, char* argv[]) {
     // Init Qt Graphics
@@ -28,64 +30,17 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    QThread* m_networkThread = new QThread();
+    Telecom::Server::NetworkWorker* m_worker = new Telecom::Server::NetworkWorker{nullptr};
 
-    QTcpServer server;
+    m_worker->moveToThread(m_networkThread);
 
-    // listen port
-    if (!server.listen(QHostAddress::LocalHost, 12345)) {
-        qCritical() << "провал запуска сервера:" << server.errorString();
-        return -1;
-    }
-    qDebug() << "сервер запущен" ;
+    QThread tread;
+    Telecom::Server::NetworkWorker nw;
 
-    //ждём подключения
-    while (true) {
-        if (!server.waitForNewConnection(-1)) {
-            qDebug() << "ошибка ожидания подключения:" << server.errorString();
-            break;
-        }
+    emit m_worker->startServer(12345);
 
-        // берём сокет
-        QTcpSocket *clientSocket = server.nextPendingConnection();
-        if (!clientSocket) continue;
-
-        qDebug() << "клиент подключился:" << clientSocket->peerAddress().toString();
-
-        while (clientSocket->state() == QAbstractSocket::ConnectedState) {
-
-            // Ждём данных 30 сек
-            if (clientSocket->waitForReadyRead(30000)) {
-
-
-//                //Cчитываем 4 байта длины
-//                QByteArray sizeBuffer = clientSocket->read(sizeof(quint32));
-//                QDataStream stream(sizeBuffer);
-
-//                quint32 val;
-//                stream >> val;
-//                qDebug() << val << "Packet length";
-
-//                QByteArray jsonData = clientSocket->read(val);
-
-//                QJsonDocument doc = QJsonDocument::fromJson(jsonData);
-
-
-                QJsonObject obj = Telecom::Network::NetworkProtocol::readPacket(clientSocket);
-
-                qDebug().noquote() << QJsonDocument(obj).toJson(QJsonDocument::Indented);
-
-
-            } else
-                break;
-
-        }
-
-        delete clientSocket;
-    }
-
-    server.close();
-
-
+    m_networkThread->start();
 
     // Launch GUI loop
     return app.exec();
