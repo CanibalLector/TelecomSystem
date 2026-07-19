@@ -35,12 +35,37 @@ int main(int argc, char* argv[]) {
 
     m_worker->moveToThread(m_networkThread);
 
-    QThread tread;
-    Telecom::Server::NetworkWorker nw;
-
     emit m_worker->startServer(12345);
 
     m_networkThread->start();
+
+    // Принимаем данные от клиента (id, тип, JSON-объект, время)
+    QObject::connect(m_worker, &Telecom::Server::NetworkWorker::dataReceived,
+                     &app, [](const QString& id, const QString& type, const QJsonObject& data, const QDateTime& timestamp) {
+
+        qDebug() << "dataReceived" << "ID клиента:" << id << "Тип пакета:" << type << "Время:"
+                 << timestamp.toString("yyyy-MM-dd hh:mm:ss.zzz");
+
+        qDebug().noquote() << "JSON данные:" << QJsonDocument(data).toJson(QJsonDocument::Compact);
+    });
+
+    // Принимаем событие подключения нового клиента (id, ip, порт)
+    QObject::connect(m_worker, &Telecom::Server::NetworkWorker::clientConnected,
+                     &app, [](const QString& id, const QString& ip, quint16 port, const QStringList& ids) {
+
+        qDebug() << "clientConnected" << id << "Адрес:" << QString("%1:%2").arg(ip).arg(port) ;
+        qDebug() << ids;
+    });
+
+    // Принимаем событие отключения клиента (только id)
+    QObject::connect(m_worker, &Telecom::Server::NetworkWorker::clientDisconnected,
+                     &app, [](const QString& id, const QStringList& ids) {
+
+        qDebug() << "clientDisconnected" << id;
+        qDebug() << ids;
+    });
+
+
 
     // Launch GUI loop
     return app.exec();

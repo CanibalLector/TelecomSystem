@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QJsonObject>
 #include "NetworkProtocol.hpp"
+#include "ClientData.hpp"
 
 namespace Telecom::Server {
 
@@ -15,6 +16,12 @@ class NetworkWorker : public QObject {
 public:
     explicit NetworkWorker(QObject* parent = nullptr);
     ~NetworkWorker() override;
+
+signals:
+    // Сигналы в GUI поток о событиях сети
+    void dataReceived(const QString& id, const QString& type, const QJsonObject& data, const QDateTime& timestamp);
+    void clientConnected(const QString& id, const QString& ip, quint16 port, const QStringList& ids);
+    void clientDisconnected(const QString& id, const QStringList& ids);
 
 public slots:
 
@@ -29,6 +36,10 @@ private slots:
 
 private:
     QTcpServer* m_tcpServer{nullptr};
+    QMap<QTcpSocket*, ClientData*> m_clientsMap;            // Подключённые клиенты
+
+    //Обработка принятого JSON
+    void processIncomingJson(ClientData* client, const QJsonObject& json);
 
 };
 

@@ -8,6 +8,8 @@ int main(int argc, char *argv[]) {
 
     app.setApplicationName("Telecom_Client");
 
+
+    // Простая проверка подключения к серверу отправки данных в сокет
     qDebug() << "client started";
 
     QTcpSocket socket;
@@ -15,13 +17,19 @@ int main(int argc, char *argv[]) {
     socket.connectToHost("127.0.0.1", 12345);
 
     QJsonObject json;
-    json["field_1"] = "field_1";
+    json["type"] = "field_1";
     json["field_2"] = 30;
     json["field_3"] = true;
 
     Telecom::Network::NetworkProtocol::sendPacket(&socket,json);
+    qDebug() << "data send";
 
-    socket.close();
+
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &app, [&socket]() {
+        socket.close();
+        qDebug() << "socket close";
+
+    });
 
     // Exec loop
     return app.exec();

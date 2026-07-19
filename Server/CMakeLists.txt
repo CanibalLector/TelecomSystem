@@ -3,9 +3,11 @@ find_package(Qt6 6.5.2 REQUIRED COMPONENTS Gui Qml Quick)
 
 #
 qt_add_executable(TelecomServer
-    src/main.cpp
     include/NetworkWorker.hpp
+    include/ClientData.hpp
+    src/main.cpp
     src/NetworkWorker.cpp
+    src/ClientData.cpp
 )
 
 # Set QML Module
