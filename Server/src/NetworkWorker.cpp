@@ -62,17 +62,8 @@ namespace Telecom::Server {
             connect(clientSocket, &QTcpSocket::readyRead, this, &NetworkWorker::onReadyRead);
             connect(clientSocket, &QTcpSocket::disconnected, this, &NetworkWorker::onDisconnected);
 
-            // Передаём список клиентов
-            QStringList clientsList;
-            auto n = 0;
-            for (auto it = m_clientsMap.constBegin() ; it != m_clientsMap.constEnd(); ++it) {
-                n++;
-                QString item = QString::number(n) + ". id: " +QString(it.value()->id());
-                clientsList.append(item);
-            }
-
             // Посылаем сигнал в GUI о подключении нового клиента
-            emit clientConnected(client->id(), client->ipAddress(), client->port(), clientsList);
+            emit clientConnected(client->id(), client->ipAddress(), client->port());
         }
     }
 
@@ -114,23 +105,12 @@ namespace Telecom::Server {
         ClientData* session = m_clientsMap[clientSocket];
         QString clientId = session->id();
 
+        // Посылаем сигнал в GUI об отключении клиента
+        emit clientDisconnected(clientId);
+
         // Удаляем клиента
         m_clientsMap.remove(clientSocket);
         clientSocket->deleteLater();
-
-        // Формируем список клиентов
-        QStringList clientsList;
-        auto n = 0;
-        for (auto it = m_clientsMap.constBegin() ; it != m_clientsMap.constEnd(); ++it) {
-            n++;
-            QString item = QString::number(n) + ". id: " +QString(it.value()->id());
-            clientsList.append(item);
-        }
-
-        if(clientsList.isEmpty()) clientsList.append("No clients");
-
-        // Посылаем сигнал в GUI об отключении клиента
-        emit clientDisconnected(clientId, clientsList);
     }
 
 

@@ -8,7 +8,7 @@ ClientData::ClientData(QTcpSocket* socket, QObject* parent)
 
     if (m_socket) {
         // Генерируем уникальный ID для клиента на основе криптографически стойкого UUID
-        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces).left(8);
 
         // Запоминаем строковый IP-адрес удаленного устройства
         m_ipAddress = m_socket->peerAddress().toString();

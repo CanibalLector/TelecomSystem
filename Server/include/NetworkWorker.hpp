@@ -20,8 +20,8 @@ public:
 signals:
     // Сигналы в GUI поток о событиях сети
     void dataReceived(const QString& id, const QString& type, const QJsonObject& data, const QDateTime& timestamp);
-    void clientConnected(const QString& id, const QString& ip, quint16 port, const QStringList& ids);
-    void clientDisconnected(const QString& id, const QStringList& ids);
+    void clientConnected(const QString& id, const QString& ip, quint16 port);
+    void clientDisconnected(const QString& id);
 
 public slots:
 
