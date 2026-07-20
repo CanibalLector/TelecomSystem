@@ -18,7 +18,16 @@ qt_add_qml_module(TelecomServer
     VERSION 1.0
     QML_FILES
         qml/Main.qml
+        qml/ControlButton.qml
+    RESOURCES
+        images/bg.png
+        images/area-chart-96.png
+        images/console-96.png
+        images/settings-96.png
+        images/structure-96.png
+        images/list-96.png
 )
+
 
 target_include_directories(TelecomServer PRIVATE include)
 
