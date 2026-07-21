@@ -1,12 +1,10 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Shapes 1.5
+import QtQuick.Shapes
 
-// Кнопка перключения экранов с анимацией
 RoundButton {
-
     id: btn
-    property alias icon_src: icon.source
+    property alias iconSrc: icon.source
     property bool activation: false
     implicitHeight: (Screen.width/Screen.pixelDensity) > 100 ? Screen.pixelDensity * 15 : Screen.pixelDensity * 8
     implicitWidth: implicitHeight
@@ -16,7 +14,7 @@ RoundButton {
 
     onActivationChanged:{
         if(activation)
-            up_scale.start();
+            upScale.start();
         else
             downScale.start();
     }
@@ -34,24 +32,58 @@ RoundButton {
     }
 
     background: Rectangle {
+        id: bgRect
         implicitWidth: 40
         implicitHeight: 40
         radius: parent.radius
         opacity: enabled ? 1 : 0.3
         visible: !parent.flat || parent.down || parent.checked || parent.highlighted
-        color: Color.blend(parent.checked || parent.highlighted ? parent.palette.dark : parent.palette.button,
-                           parent.palette.mid, parent.down ? 0.5 : 0.0)
+
+        color: "transparent"
+
         border.color: parent.palette.highlight
         border.width: parent.visualFocus ? 2 : 0
 
-        gradient: RadialGradient {
-            GradientStop { position: 0.0; color: "#11BBBBBB" }
-            GradientStop { position: 1.0; color: "#AABBBBBB" }
+        Shape {
+            anchors.fill: parent
+            layer.enabled: true
+            layer.samples: 4
+
+            ShapePath {
+                strokeColor: "transparent"
+
+                // Рисуем окружность по границам кнопки
+                startX: 0
+                startY: bgRect.height / 2
+                PathAngleArc {
+                    centerX: bgRect.width / 2
+                    centerY: bgRect.height / 2
+                    radiusX: bgRect.width / 2
+                    radiusY: bgRect.height / 2
+                    startAngle: 0
+                    sweepAngle: 360
+                }
+
+                // Встроенный радиальный градиент из модуля Shapes
+                fillGradient: RadialGradient {
+                    centerX: bgRect.width / 2
+                    centerY: bgRect.height / 2
+                    centerRadius: bgRect.width / 2
+                    focalX: centerX
+                    focalY: centerY
+
+                    stops: [
+                        GradientStop { position: 0.0; color: "#AABBBBBB" },
+                        GradientStop { position: 0.7; color: "#44BBBBBB" },
+                        GradientStop { position: 1.0; color: "#15BBBBBB" }
+                    ]
+                }
+
+            }
         }
     }
 
-    contentItem:
-        Text {
+    contentItem: Text {
         text: btn.text
         horizontalAlignment: Text.AlignHCenter
         clip: false
@@ -60,7 +92,7 @@ RoundButton {
         font.pixelSize: btn.height*0.2
     }
 
-    Image{
+    Image {
         id: icon
         source: icon_src
         height: btn.height*0.7
@@ -68,6 +100,4 @@ RoundButton {
         anchors.top: btn.top
         anchors.horizontalCenter: btn.horizontalCenter
     }
-
-
 }

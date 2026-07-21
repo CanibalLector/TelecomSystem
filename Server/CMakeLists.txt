@@ -19,6 +19,11 @@ qt_add_qml_module(TelecomServer
     QML_FILES
         qml/Main.qml
         qml/ControlButton.qml
+        qml/ClientsView.qml
+        qml/EventsView.qml
+        qml/DataView.qml
+        qml/ControlView.qml
+        qml/SettingsView.qml
     RESOURCES
         images/bg.png
         images/area-chart-96.png
