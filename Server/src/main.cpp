@@ -1,11 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 #include "ServerController.hpp"
 
 int main(int argc, char* argv[]) {
     // Init Qt Graphics
     QGuiApplication app(argc, argv);
+
+    // Set cross platform style
+    QQuickStyle::setStyle("Basic");
 
     // Set ddescription
     app.setOrganizationName("CanibalCorp");
@@ -25,8 +29,6 @@ int main(int argc, char* argv[]) {
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
-
-    controller.toggleServer(12345);
 
     // Launch GUI loop
     return app.exec();

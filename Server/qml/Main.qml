@@ -9,6 +9,18 @@ ApplicationWindow {
     visible: true
     title: qsTr("Telecom control system")
 
+    // Задаем глобальную цветовую палитру
+    readonly property color colorBgControlView: "#45218BF1"  // Фон экрана управления
+    readonly property color colorBgDataView: "#451FFB31"     // Фон экрвна данных
+    readonly property color colorBgSettingsView: "#45F18B71" // Фон экрана настроек
+    readonly property color colorBgClientsView: "#4551FB71"  // Фон экрана списка клиентов
+    readonly property color colorBgEvetnsView: "#45F42BF1"   // Фон экрана событий
+    readonly property color colorSaveActivGreen: "#4417EE20" // Активный статус / Безопасно
+    readonly property color colorAlarmStopRed: "#44EE1720"   // Статус выключен / Критические алармы
+    readonly property color colorBgTextEdit: "#33AAAAAA"     // Фон текстовых полей
+    readonly property color colorTextMain: "#FFFFFF"         // Основной текст
+    readonly property color colorTextMuted: "#85929E"        // Второстепенный текст
+
     // Фоновая подложка всего окна
     background:  Image {
         anchors.fill: parent

@@ -32,7 +32,7 @@ ServerController::~ServerController() {
     m_networkThread->wait();
 }
 
-// Включенние/выключение сервера
+// Включенние/выключение сервера из QML
 void ServerController::toggleServer(quint16 port) {
     if (m_isServerRunning) {
         emit requestStopServer();
@@ -41,6 +41,8 @@ void ServerController::toggleServer(quint16 port) {
         emit requestStartServer(port);
         m_isServerRunning = true;
     }
+
+    emit serverStateChanged(); // Отправляем сигнал в GUI
 }
 
 // Добавление клиента в список подключений

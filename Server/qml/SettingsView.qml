@@ -5,7 +5,7 @@ Rectangle {
     id: background
     gradient: Gradient {
         GradientStop { position: 0.0; color: "white"}
-        GradientStop { position: 1.0; color: "#45F18B71" }
+        GradientStop { position: 1.0; color: root.colorBgSettingsView }
     }
 
     Text {

@@ -1,5 +1,5 @@
 
-find_package(Qt6 6.5.2 REQUIRED COMPONENTS Gui Qml Quick)
+find_package(Qt6 6.5.2 REQUIRED COMPONENTS Gui Qml Quick QuickControls2)
 
 #
 qt_add_executable(TelecomServer
@@ -42,5 +42,6 @@ target_link_libraries(TelecomServer PRIVATE
     Qt6::Gui
     Qt6::Qml
     Qt6::Quick
+    Qt6::QuickControls2
     SharedNetwork # Добавляем общую статическую библиотеку для записи/чтения JSON в сокет
 )
