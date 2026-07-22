@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QThread>
-#include <QStringListModel>
 #include "NetworkWorker.hpp"
+#include "ClientsListModel.hpp"
 
 namespace Telecom::Server {
 
@@ -13,6 +13,7 @@ class ServerController : public QObject {
 
     // Регистрируем свойства для QML
     Q_PROPERTY(bool isServerRunning READ isServerRunning NOTIFY serverStateChanged)
+    Q_PROPERTY(ClientsListModel* clientsModel READ clientsModel CONSTANT)
 
 public:
     explicit ServerController(QObject* parent = nullptr);
@@ -20,6 +21,7 @@ public:
 
     // Геттеры свойств для QML
     bool isServerRunning() const { return m_isServerRunning; }
+    ClientsListModel* clientsModel() const { return m_clientsModel; }
 
 signals:
     // Сигналы управления NetworkWorker
@@ -32,6 +34,10 @@ signals:
 public slots:
     // Включенние/выключение сервера из QML
     void toggleServer(quint16 port);
+    // Команда на подключение клиента  из QML
+    void setClientConnection(const QString &id, bool state);
+    // Команда на старт отправки данных из QML
+    void setClientDataSending(const QString &id, bool state);
 
 private slots:
     // Слоты агрегации списков подключений
@@ -42,7 +48,7 @@ private:
     QThread* m_networkThread{nullptr};       // Поток для NetworkWorker
     NetworkWorker* m_worker{nullptr};        // Объект сетевой логики (NetworkWorker)
 
-    QStringListModel* m_clientsModel{nullptr}; // Простая модель списка клиентов
+    ClientsListModel* m_clientsModel{nullptr}; // Простая модель списка клиентов
 
     bool m_isServerRunning{false};           // Флаг состояния сервера
     QStringList m_activeClients;             // Список клиентов

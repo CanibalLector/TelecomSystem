@@ -6,10 +6,12 @@ qt_add_executable(TelecomServer
     include/NetworkWorker.hpp
     include/ClientData.hpp
     include/ServerController.hpp
+    include/ClientsListModel.hpp
     src/main.cpp
     src/NetworkWorker.cpp
     src/ClientData.cpp
     src/ServerController.cpp
+    src/ClientsListModel.cpp
 )
 
 # Set QML Module

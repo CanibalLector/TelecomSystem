@@ -17,6 +17,12 @@ int main(int argc, char* argv[]) {
 
     Telecom::Server::ServerController controller;
 
+    // Регистрируем тип
+    qmlRegisterUncreatableType<Telecom::Server::ClientsListModel>(
+        "Telecom.Models", 1, 0, "ClientsListModel",
+        "Модель создается только на стороне C++ в ServerController"
+        );
+
     //Create QML engine
     QQmlApplicationEngine engine;
 
