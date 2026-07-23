@@ -62,15 +62,21 @@ QStringList ClientsListModel::getCheckedIds() const {
     return checkedIds;
 }
 
-bool ClientsListModel::addClient(const QString &id, const QString &description) {
-    if (id.isEmpty() || findRowById(id) != -1) {
+bool ClientsListModel::addClient(const QString &id, const QString &description, ActivityState state) {
+    if (id.isEmpty()) {
         return false;
+    }
+
+    // Если клиент уже есть, просто обновляем ему статус
+    if( findRowById(id) != -1 ) {
+        setClientActivityState(id, state);
+        return true;
     }
 
     int insertRow = m_clients.count();
     beginInsertRows(QModelIndex(), insertRow, insertRow);
 
-    m_clients.append({ id, description, false, ActivityState::Disconnected });
+    m_clients.append({ id, description, false, state });
 
     endInsertRows();
     return true;

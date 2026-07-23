@@ -42,6 +42,7 @@ public slots:
 private slots:
     // Слоты агрегации списков подключений
     void handleClientConnected(const QString& id, const QString& ip, quint16 port);
+    void handleClientPending(const QString& id, const QString& ip, quint16 port);
     void handleClientDisconnected(const QString& id);
 
 private:
@@ -51,7 +52,6 @@ private:
     ClientsListModel* m_clientsModel{nullptr}; // Простая модель списка клиентов
 
     bool m_isServerRunning{false};           // Флаг состояния сервера
-    QStringList m_activeClients;             // Список клиентов
 };
 
 } // namespace Telecom::Server

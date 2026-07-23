@@ -5,7 +5,6 @@
 #include <QTcpServer>
 #include <QMap>
 #include <QJsonObject>
-#include "NetworkProtocol.hpp"
 #include "ClientData.hpp"
 
 namespace Telecom::Server {
@@ -18,10 +17,15 @@ public:
     ~NetworkWorker() override;
 
 signals:
+    // Сигналы управления подключением клиентов от контроллера
+    void requestDisconnectClient(const QString &id);
+    void requestConnectClient(const QString& id);
+
     // Сигналы в GUI поток о событиях сети
     void dataReceived(const QString& id, const QString& type, const QJsonObject& data, const QDateTime& timestamp);
     void clientConnected(const QString& id, const QString& ip, quint16 port);
     void clientDisconnected(const QString& id);
+    void clientPendingConnection(const QString& id, const QString& ip, quint16 port);
 
 public slots:
 
@@ -33,10 +37,14 @@ private slots:
     void onNewConnection();
     void onReadyRead();
     void onDisconnected();
+    // Слоты процесса подключения/отключения клиента в своём потоке
+    void processConnectClient(const QString &id);
+    void processDisconnectClient(const QString &id);
 
 private:
     QTcpServer* m_tcpServer{nullptr};
-    QMap<QTcpSocket*, ClientData*> m_clientsMap;            // Подключённые клиенты
+    QMap<QTcpSocket*, ClientData*> m_clientsMap;         // Подключённые клиенты
+    QMap<QString, ClientData*> m_pendingClientsMap;      // Ожидающие клиенты
 
     //Обработка принятого JSON
     void processIncomingJson(ClientData* client, const QJsonObject& json);

@@ -9,6 +9,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# Отключим проверку этого заголовочника для Apple в связи с неполной поддержкой с++23
+if(APPLE)
+    add_compile_definitions(_LIBCPP_HAS_NO_INT128)
+endif()
 
 find_package(Qt6 6.5.2 REQUIRED COMPONENTS Core Network)
 

@@ -39,7 +39,7 @@ public:
     QStringList getCheckedIds() const;
 
     // Методы добавления и удаления клиентов
-    bool addClient(const QString &id, const QString &description);
+    bool addClient(const QString &id, const QString &description, ActivityState state);
     bool removeClient(const QString &id);
 
     // Метод для обновления статуса активности
